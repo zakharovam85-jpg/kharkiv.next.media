@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💼 Кар'єра | YOUNG</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <div class="logo" onclick="location.href='index.html'">YOUNG<span style="font-size:12px;">.</span><small>для тих, хто в русі</small></div>
+        <div class="date-time" id="currentDateTime"></div>
+    </div>
+</div>
+
+<div class="tabs">
+    <div class="tabs-container">
+        <a href="index.html" class="tab-btn">🏠 Головне</a>
+        <a href="trends.html" class="tab-btn">🔥 Тренди</a>
+        <a href="music.html" class="tab-btn">🎵 Музика</a>
+        <a href="career.html" class="tab-btn active">💼 Кар'єра</a>
+        <a href="lifestyle.html" class="tab-btn">✨ Лайфстайл</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <div class="category-header">
+        <h1>💼 Кар'єра</h1>
+        <p>Стажування, гранти, робота мрії та розвиток</p>
+    </div>
+    <div class="news-grid" id="careerNews"></div>
+    <div class="subscribe">
+        <h3>📱 Будь у тусовці</h3>
+        <p>Підпишись — отримуй найцікавіше</p>
+        <div class="subscribe-form">
+            <input type="email" id="subEmail" placeholder="твій email">
+            <button onclick="subscribeNews()">Підписатись</button>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>🔥 YOUNG — медіа для нового покоління</p>
+</div>
+
+<div class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0, behavior:'smooth'})">↑</div>
+
+<div id="newsModal" class="modal" onclick="if(event.target===this) closeModal()">
+    <div class="modal-content">
+        <div class="modal-header"><h2 id="modalTitle"></h2><span class="close-modal" onclick="closeModal()">&times;</span></div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const careerNews = [
+        { id: 1, title: "IT-стартап харківських студентів залучив $500 000 інвестицій", excerpt: "Додаток для пошуку менторів серед професіоналів став хітом у США та Європі.", content: "Стартап Mentory, створений трьома студентами ХНУРЕ, отримав інвестиції від фонду Horizon Capital. Вже зараз додатком користуються 150 000 людей у 12 країнах. Засновники планують відкрити офіс у Варшаві до кінця року та найняти ще 20 розробників. Вік засновників — 21, 22 та 23 роки.", image: "https://picsum.photos/id/26/800/500", date: "2026-05-17", views: 15780, category: "Кар'єра" },
+        { id: 2, title: "Грант на навчання в Німеччині: як українській студентці отримати стипендію", excerpt: "Дедлайн — 1 червня. Детальна інструкція від тієї, хто вже навчається в Берліні.", content: "DAAD пропонує 50 грантів для українських студентів. Витрати на проживання та навчання покриваються повністю. Головні критерії: академічні успіхи (середній бал від 85), володіння англійською (B2) та мотиваційний лист. Дедлайн подачі заявок — 1 червня 2026 року. Онлайн-зустріч для охочих відбудеться 25 травня.", image: "https://picsum.photos/id/42/800/500", date: "2026-05-14", views: 9870, category: "Кар'єра" },
+        { id: 3, title: "ТОП-5 професій майбутнього: на кого вчитися у 2026", excerpt: "Аналітики прогнозують зростання попиту на AI-спеціалістів та еко-менеджерів.", content: "За даними Work.ua та LinkedIn, найбільш затребуваними у 2026-2030 роках будуть: AI-інженери (з/п від 4000$), кіберпсихологи, еко-менеджери, фахівці з кібербезпеки та генетичні консультанти. Розповідаємо, де отримати ці спеціальності в Україні.", image: "https://picsum.photos/id/0/800/500", date: "2026-05-11", views: 21340, category: "Кар'єра" },
+        { id: 4, title: "Стажування в Google для українських студентів: як податися", excerpt: "Програма Step 2026 — для першокурсників та другокурсників.", content: "Google оголосив набір на технічну стажувальну програму Step. Вимоги: базові знання Python або Java, англійська B1+, навчання на IT-спеціальності. Стажування оплачуване — 2500$ на місяць. Дедлайн — 30 червня. Детальна інструкція з прикладами CV — у нашому матеріалі.", image: "https://picsum.photos/id/90/800/500", date: "2026-05-09", views: 16780, category: "Кар'єра" },
+        { id: 5, title: "Як створити резюме без досвіду роботи: поради від HR-ів", excerpt: "Акцент на софт-скілз, волонтерство та навчальні проєкти.", content: "HR-експертки радять зосередитись на навчальних досягненнях, курсах, волонтерстві та особистих проєктах. Шаблони резюме та приклади CV для новачків — у гайді. Також пояснюємо, як правильно заповнювати LinkedIn, щоб тебе помітили рекрутери.", image: "https://picsum.photos/id/22/800/500", date: "2026-05-07", views: 11450, category: "Кар'єра" }
+    ];
+
+    function formatDate(dateStr) { const d = new Date(dateStr); return `${d.getDate().toString().padStart(2,'0')}.${(d.getMonth()+1).toString().padStart(2,'0')}.${d.getFullYear()}`; }
+    function openNews(news) { 
+        document.getElementById('modalTitle').innerHTML = news.title;
+        document.getElementById('modalBody').innerHTML = `<img src="${news.image}"><div class="modal-meta"><span>📅 ${formatDate(news.date)}</span><span>👁️ ${news.views.toLocaleString()}</span><span>📌 ${news.category}</span></div><p style="line-height:1.6; color:#b0b0c0;">${news.content}</p>`;
+        document.getElementById('newsModal').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('newsModal').style.display = 'none'; }
+    function subscribeNews() { const email = document.getElementById('subEmail').value; if(email) alert(`🔥 Дякуємо! На ${email} надіслано підтвердження.`); else alert('Введи email'); }
+    function renderCareerNews() {
+        document.getElementById('careerNews').innerHTML = careerNews.map(n => `<div class="news-card" onclick="openNews(careerNews.find(x=>x.id===${n.id}))"><div class="news-image" style="background-image: url('${n.image}')"><div class="news-category">${n.category}</div></div><div class="news-content"><div class="news-title">${n.title}</div><div class="news-excerpt">${n.excerpt}</div><div class="news-meta"><span>📅 ${formatDate(n.date)}</span><span>👁️ ${n.views.toLocaleString()}</span></div></div></div>`).join('');
+    }
+    function updateDateTime() { document.getElementById('currentDateTime').innerHTML = new Date().toLocaleString('uk-UA', { hour:'2-digit', minute:'2-digit', day:'numeric', month:'short' }); }
+    setInterval(updateDateTime, 1000); updateDateTime();
+    renderCareerNews();
+    window.addEventListener('scroll', () => { document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 300); });
+    window.openNews = openNews; window.closeModal = closeModal; window.subscribeNews = subscribeNews;
+</script>
+</body>
+</html>
